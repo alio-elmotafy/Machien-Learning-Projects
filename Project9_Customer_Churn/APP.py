@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 import numpy as np
+import os
 
 # --- SAFE ASSET LOADING ---
 @st.cache_resource
@@ -97,3 +98,4 @@ if st.button("PREDICT CHURN RISK"):
         st.markdown(f"""<div class='prediction-box' style='background-color: rgba(0, 235, 147, 0.2); border: 2px solid #00eb93;'>
 
                     ✅ LOW RISK: {probability*100:.1f}% Churn Probability</div>""", unsafe_allow_html=True)
+
