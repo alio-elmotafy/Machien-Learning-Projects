@@ -3,15 +3,23 @@ import pandas as pd
 import joblib
 import numpy as np
 
-# --- 1. LOAD ASSETS ---
+# --- SAFE ASSET LOADING ---
 @st.cache_resource
-def load_ml_assets():
-    model = joblib.load('lgbm_model.pkl')
-    scaler = joblib.load('scaler.pkl')
-    model_columns = joblib.load('model_columns.pkl')
+def load_assets():
+    # This checks if we are in the subfolder or the root
+    base_path = "Project9_Customer_Churn" if os.path.exists("Project9_Customer_Churn") else ""
+    
+    model_path = os.path.join(base_path, "lgbm_model.pkl")
+    scaler_path = os.path.join(base_path, "scaler.pkl")
+    cols_path = os.path.join(base_path, "model_columns.pkl")
+    
+    model = joblib.load(model_path)
+    scaler = joblib.load(scaler_path)
+    model_columns = joblib.load(cols_path)
+    
     return model, scaler, model_columns
 
-model, scaler, model_columns = load_ml_assets()
+model, scaler, model_columns = load_assets()
 
 # --- 2. PRETTY UI ---
 st.set_page_config(page_title="Churn Predictor", layout="wide")
@@ -87,4 +95,5 @@ if st.button("PREDICT CHURN RISK"):
                     🚨 HIGH RISK: {probability*100:.1f}% Churn Probability</div>""", unsafe_allow_html=True)
     else:
         st.markdown(f"""<div class='prediction-box' style='background-color: rgba(0, 235, 147, 0.2); border: 2px solid #00eb93;'>
+
                     ✅ LOW RISK: {probability*100:.1f}% Churn Probability</div>""", unsafe_allow_html=True)
